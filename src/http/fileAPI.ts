@@ -1,6 +1,6 @@
 import { IFileLoadResponse } from "../models/IFileLoadResponse"
 import { IFileToHtmlResponse } from '../models/IFileToHtmlResponse'
-import { $host } from "./index."
+import { $host } from "."
 
 export const loadFile = async (sheetName: string, templateName: string) => {
     const data = {

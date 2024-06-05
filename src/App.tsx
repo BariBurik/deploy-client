@@ -12,7 +12,6 @@ const App: FC = () => {
   const [finallyFile, setFinallyFile] = useState<null | Blob>(null)
   const [sheetName, setSheetName] = useState<string | null>(null)
   const [temaplateName, setTemplateName] = useState<string | null>(null)
-  console.log(`файл: ${finallyFile}  html: ${finallyHtml}, ${linkToTemplate}, ${linkToSheet}, ${sheetName}, ${temaplateName}`)
 
   const sheetUrlToFile = async () => {
     try {

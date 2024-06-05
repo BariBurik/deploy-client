@@ -1,5 +1,5 @@
 import { ILinkResponse } from "../models/ILinkResponse"
-import { $host } from "./index."
+import { $host } from "."
 
 export const linkToFile = async (link: URL, ext: string) => {
     const data = {
