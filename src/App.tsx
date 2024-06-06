@@ -12,6 +12,8 @@ const App: FC = () => {
   const [finallyFile, setFinallyFile] = useState<null | Blob>(null)
   const [sheetName, setSheetName] = useState<string | null>(null)
   const [temaplateName, setTemplateName] = useState<string | null>(null)
+  const [isSent, setIsSent] = useState<boolean>(true)
+  console.log(isSent)
 
   const sheetUrlToFile = async () => {
     try {
@@ -42,21 +44,24 @@ const App: FC = () => {
   useEffect(() => {
     const loadingFile = async () => {
       if (sheetName && temaplateName) {
+        setIsSent(false)
         try {
           const response = await loadFile(sheetName, temaplateName);
           const buffer = response.fileBuffer.data;
   
           if (buffer) {
-              console.log('Buffer length:', buffer.length);
               const uint8Array = new Uint8Array(buffer);
               const blob = new Blob([uint8Array], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-              console.log('Blob size:', blob.size);
               setFinallyFile(blob);
+              setIsSent(true)
           } else {
               console.error('Received an empty buffer.');
+              setIsSent(true)
           }
+          
         } catch (error) {
           console.error('Error loading file:', error);
+          setIsSent(true)
         }
       }
     }
@@ -99,12 +104,20 @@ const App: FC = () => {
     }
   }
  
-  return (
-    <div className="App">
-      <Form download={downloadFile} sheetUrlToFile={sheetUrlToFile} templateUrlToFile={templateUrlToFile} linkToSheet={linkToSheet} linkToTemplate={linkToTemplate} setLinkToSheet={setLinkToSheet} setLinkToTemplate={setLinkToTemplate} openModal={openModal}/>
-      {modalVisibale && finallyHtml ? <Modal finallyHtml={finallyHtml} closeModal={closeModal}/> : null}
-    </div>
-  );
+  if (isSent) {
+    return (
+      <div className="App">
+        <Form download={downloadFile} sheetUrlToFile={sheetUrlToFile} templateUrlToFile={templateUrlToFile} linkToSheet={linkToSheet} linkToTemplate={linkToTemplate} setLinkToSheet={setLinkToSheet} setLinkToTemplate={setLinkToTemplate} openModal={openModal}/>
+        {modalVisibale && finallyHtml ? <Modal finallyHtml={finallyHtml} closeModal={closeModal}/> : null}
+      </div>
+    );
+  } else if (!isSent) {
+    return (
+      <div className='App'>Загрузка...</div>
+    )
+  }
+
+  return null
 
 }
 
